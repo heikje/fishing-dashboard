@@ -167,7 +167,12 @@
       function setSource(metric, source, status, error) {
         const el = document.getElementById(`source-${metric}`);
         const host = new URL(source).host;
-        el.textContent = `Source: ${host}${status === "fallback" && error ? ` (${error})` : ""}`;
+        const fallbackNote =
+          status === "fallback"
+            ? ` - fallback data in use${error ? ` (${error})` : ""}`
+            : "";
+        const safeSource = encodeURI(source);
+        el.innerHTML = `Source: <a href="${safeSource}" target="_blank" rel="noopener noreferrer" class="font-medium text-brand-600 underline hover:text-brand-700">${host}</a>${fallbackNote}`;
       }
 
       function pushTrendValue(key, value) {
