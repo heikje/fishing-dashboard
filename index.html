@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fishing Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: "#eef7ff", 
+                100: "#d8ebff",
+                500: "#2563eb",
+                600: "#1d4ed8"
+              }
+            },
+            boxShadow: {
+              soft: "0 10px 30px -12px rgba(2, 6, 23, 0.18)"
+            }
+          }
+        }
+      };
+    </script>
+  </head>
+  <body class="min-h-screen bg-slate-100 text-slate-800">
+    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <header class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+        <p class="text-sm font-medium uppercase tracking-wider text-brand-600">Overview</p>
+        <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Fishing Conditions Dashboard</h1>
+        <p class="mt-3 max-w-2xl text-sm text-slate-600 sm:text-base">
+          Mock-driven cards for fish counts, snow depth, and water levels. Data source integration can be connected later.
+        </p>
+        <p id="last-updated" class="mt-2 text-xs font-medium text-slate-500">Last updated: --</p>
+        </div>
+        <button
+          id="refresh-mock"
+          type="button"
+          class="inline-flex items-center justify-center rounded-xl bg-brand-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
+        >
+          Refresh data
+        </button>
+      </header>
+
+      <main class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <section class="rounded-2xl bg-white p-6 shadow-soft ring-1 ring-slate-200">
+          <div class="mb-5 flex items-start justify-between">
+            <div>
+              <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Fish Counter</h2>
+              <p class="mt-1 text-lg font-semibold text-slate-900">Byskeälven Live</p>
+            </div>
+            <span id="status-fish" class="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700">Mock</span>
+          </div>
+          <p id="value-fish" class="text-4xl font-bold text-slate-900">--</p>
+          <p class="mt-2 text-sm text-slate-500">Fish today</p>
+          <div class="mt-4">
+            <p class="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">Trend</p>
+            <svg id="spark-fish" viewBox="0 0 160 44" class="h-11 w-full">
+              <path d="" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <div id="source-fish" class="mt-5 rounded-xl bg-slate-50 p-3 text-xs text-slate-600">
+            Source: fiskdata.se (mock fallback)
+          </div>
+        </section>
+
+        <section class="rounded-2xl bg-white p-6 shadow-soft ring-1 ring-slate-200">
+          <div class="mb-5 flex items-start justify-between">
+            <div>
+              <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Snow Depth</h2>
+              <p class="mt-1 text-lg font-semibold text-slate-900">SMHI Observations</p>
+            </div>
+            <span id="status-snow" class="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-700">Mock</span>
+          </div>
+          <p id="value-snow" class="text-4xl font-bold text-slate-900">-- cm</p>
+          <p class="mt-2 text-sm text-slate-500">Latest reported depth</p>
+          <div class="mt-4">
+            <p class="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">Trend</p>
+            <svg id="spark-snow" viewBox="0 0 160 44" class="h-11 w-full">
+              <path d="" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <div id="source-snow" class="mt-5 rounded-xl bg-slate-50 p-3 text-xs text-slate-600">
+            Source: smhi.se
+          </div>
+        </section>
+
+        <section class="rounded-2xl bg-white p-6 shadow-soft ring-1 ring-slate-200">
+          <div class="mb-5 flex items-start justify-between">
+            <div>
+              <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Water Level</h2>
+              <p class="mt-1 text-lg font-semibold text-slate-900">Riverapp Station</p>
+            </div>
+            <span id="status-water" class="rounded-full bg-sky-100 px-2.5 py-1 text-xs font-semibold text-sky-700">Mock</span>
+          </div>
+          <p id="value-water" class="text-4xl font-bold text-slate-900">-- m</p>
+          <p class="mt-2 text-sm text-slate-500">Current station level</p>
+          <div class="mt-4">
+            <p class="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">Trend</p>
+            <svg id="spark-water" viewBox="0 0 160 44" class="h-11 w-full">
+              <path d="" fill="none" stroke="#0ea5e9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <div id="source-water" class="mt-5 rounded-xl bg-slate-50 p-3 text-xs text-slate-600">
+            Source: riverapp.net
+          </div>
+        </section>
+
+        <section class="rounded-2xl bg-white p-6 shadow-soft ring-1 ring-slate-200">
+          <div class="mb-5 flex items-start justify-between">
+            <div>
+              <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Fishing Tips</h2>
+              <p class="mt-1 text-lg font-semibold text-slate-900">iFiske Reference</p>
+            </div>
+            <span id="status-tips" class="rounded-full bg-violet-100 px-2.5 py-1 text-xs font-semibold text-violet-700">Mock</span>
+          </div>
+          <p id="value-tips" class="text-2xl font-bold text-slate-900">Placeholder</p>
+          <p class="mt-2 text-sm text-slate-500">Seasonal conditions and hints</p>
+          <div class="mt-4">
+            <p class="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">Activity</p>
+            <svg id="spark-tips" viewBox="0 0 160 44" class="h-11 w-full">
+              <path d="" fill="none" stroke="#8b5cf6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <div id="source-tips" class="mt-5 rounded-xl bg-slate-50 p-3 text-xs text-slate-600">
+            Source: ifiske.se
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const API_BASE =
+        window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+          ? ""
+          : "https://YOUR-BACKEND-URL-HERE";
+
+      const state = {
+        fishCount: 142,
+        snowDepthCm: 68,
+        waterLevelM: 1.74,
+        tip: "Best bite early morning near moving current."
+      };
+      const trendState = {
+        fish: [138, 140, 141, 143, 142],
+        snow: [70, 69, 69, 68, 68],
+        water: [1.7, 1.72, 1.73, 1.74, 1.74],
+        tips: [52, 55, 54, 56, 57]
+      };
+      const TREND_POINTS = 12;
+
+      function setStatus(metric, status) {
+        const el = document.getElementById(`status-${metric}`);
+        const map = {
+          live: { text: "Live", cls: "bg-emerald-100 text-emerald-700" },
+          fallback: { text: "Fallback", cls: "bg-amber-100 text-amber-700" },
+          loading: { text: "Loading", cls: "bg-slate-100 text-slate-700" }
+        };
+        const selected = map[status] || map.fallback;
+        el.textContent = selected.text;
+        el.className = `rounded-full px-2.5 py-1 text-xs font-semibold ${selected.cls}`;
+      }
+
+      function setSource(metric, source, status, error) {
+        const el = document.getElementById(`source-${metric}`);
+        const host = new URL(source).host;
+        el.textContent = `Source: ${host}${status === "fallback" && error ? ` (${error})` : ""}`;
+      }
+
+      function pushTrendValue(key, value) {
+        trendState[key].push(value);
+        if (trendState[key].length > TREND_POINTS) {
+          trendState[key].shift();
+        }
+      }
+
+      function drawSparkline(svgId, points) {
+        const svg = document.getElementById(svgId);
+        const path = svg.querySelector("path");
+        if (!path || points.length < 2) {
+          return;
+        }
+
+        const width = 160;
+        const height = 44;
+        const min = Math.min(...points);
+        const max = Math.max(...points);
+        const range = max - min || 1;
+        const d = points
+          .map((point, index) => {
+            const x = (index / (points.length - 1)) * width;
+            const y = height - ((point - min) / range) * (height - 4) - 2;
+            return `${index === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`;
+          })
+          .join(" ");
+        path.setAttribute("d", d);
+      }
+
+      function renderDashboard(updatedAt) {
+        document.getElementById("value-fish").textContent = String(state.fishCount);
+        document.getElementById("value-snow").textContent = `${state.snowDepthCm} cm`;
+        document.getElementById("value-water").textContent = `${state.waterLevelM.toFixed(2)} m`;
+        document.getElementById("value-tips").textContent = state.tip;
+        document.getElementById("last-updated").textContent = `Last updated: ${new Date(updatedAt).toLocaleString()}`;
+        drawSparkline("spark-fish", trendState.fish);
+        drawSparkline("spark-snow", trendState.snow);
+        drawSparkline("spark-water", trendState.water);
+        drawSparkline("spark-tips", trendState.tips);
+      }
+
+      async function refreshDashboard() {
+        setStatus("fish", "loading");
+        setStatus("snow", "loading");
+        setStatus("water", "loading");
+        setStatus("tips", "loading");
+
+        try {
+          const response = await fetch(`${API_BASE}/api/metrics`, { cache: "no-store" });
+          if (!response.ok) {
+            throw new Error(`API ${response.status}`);
+          }
+
+          const data = await response.json();
+          state.fishCount = Number(data.fish.value);
+          state.snowDepthCm = Number(data.snow.value);
+          state.waterLevelM = Number(data.water.value);
+          state.tip = String(data.tips.value);
+
+          setStatus("fish", data.fish.status);
+          setStatus("snow", data.snow.status);
+          setStatus("water", data.water.status);
+          setStatus("tips", data.tips.status);
+          setSource("fish", data.fish.source, data.fish.status, data.fish.error);
+          setSource("snow", data.snow.source, data.snow.status, data.snow.error);
+          setSource("water", data.water.source, data.water.status, data.water.error);
+          setSource("tips", data.tips.source, data.tips.status, data.tips.error);
+
+          pushTrendValue("fish", state.fishCount);
+          pushTrendValue("snow", state.snowDepthCm);
+          pushTrendValue("water", Number(state.waterLevelM.toFixed(2)));
+          pushTrendValue("tips", Math.max(0, state.tip.length));
+
+          renderDashboard(data.updatedAt || new Date().toISOString());
+        } catch (error) {
+          setStatus("fish", "fallback");
+          setStatus("snow", "fallback");
+          setStatus("water", "fallback");
+          setStatus("tips", "fallback");
+          renderDashboard(new Date().toISOString());
+        }
+      }
+
+      document.getElementById("refresh-mock").addEventListener("click", refreshDashboard);
+      refreshDashboard();
+    </script>
+  </body>
+</html>
