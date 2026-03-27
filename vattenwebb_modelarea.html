@@ -1,0 +1,289 @@
+﻿<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Modelldata per område | SMHI - Vattenwebb</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <link rel="stylesheet" href="css/modellarea.css" />
+    <link rel="stylesheet" href="js/libs/leaflet-1-beta2/leaflet.css" />
+    <script>
+      var _paq = window._paq = window._paq || [];
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+          var u="https://analytics.smhi.se/";
+          _paq.push(['setTrackerUrl', u+'matomo.php']);
+          _paq.push(['setSiteId', '11']);
+          var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+          g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+      })();
+    </script>
+    <script>
+        Number.prototype.toSv = function(decimals) { return this.toFixed(decimals).replace(".", ",") };
+    </script>
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <div class="header-wrapper">
+          <div class="logo">
+            <a href=".."><img src="img/smhi-logo-120.png" alt="SMHI"></a><img src="img/hav-logotyp-cyan-svart-138x55px.png" alt="Havs- och vattenmyndigheten">
+          </div>
+          <div class="header-title">
+            <p>Modelldata per område</p>
+          </div>
+          <img id="spinner" src="img/spinner.gif" alt="" />
+          <a class="arkivlink" href="../archive/">Vattenwebb Arkiv</a>
+        </div>
+        <a id="info-link" href="" title="Information"><img src="img/info_icon.png" alt="Information"></a>
+      </header>
+
+      <div id="startTip" style="display: none;" class="tip">Klicka på ett område i kartan.</div>
+
+      <main id="map"></main>
+
+      <div id="search_panel">
+        <label for="searchField">Sök:</label>
+        <input id="searchField" type="text" name="search" />
+      </div>
+
+      <div id="info-dialog">
+        <h2>Modellinformation</h2>
+        <table style="margin-left: auto; margin-right: auto;">
+          <tbody>
+            <tr>
+              <td><b>HYPE modelluppsättning:</b></td>
+              <td id="hypeModelVersion"></td>
+            </tr>
+            <tr>
+              <td><b>HYPE-version:</b></td>
+              <td id="hypeProgramVersion"></td>
+            </tr>
+            <tr>
+              <td><b>HYPE simuleringsstart:</b></td>
+              <td id="hypeSimulationPeriodStart"></td>
+            </tr>
+            <tr>
+              <td><b>Kustzonsversion:</b></td>
+              <td id="kustzonProgramVersion"></td>
+            </tr>
+            <tr>
+              <td><b>Kustzon simuleringsstart:</b></td>
+              <td id="kustzonSimulationPeriodStart"></td>
+            </tr>
+            <tr>
+              <td><b>SVAR-version:</b></td>
+              <td id="svarProgramVersion"></td>
+            </tr>
+            <!--tr>
+                <td><b>Daily updates version:</b></td>
+            <td>S-HYPE2012_version_4_8_1</td>
+                                </tr-->
+                        </tbody>
+                </table>
+                <p>
+                        <b>HYPE</b> (HYdrological Predictions for the Environment) är en
+                        hydrologisk avrinningsområdesmodell som simulerar vattenflöden och
+                        ämnen från nederbörd genom mark, åar och sjöar till vattendragets
+                        utlopp. Avrinningsområdet delas upp i delområden och vidare i klasser
+                        beroende på markanvändning, jordart och höjd. Se <a
+                                href="/om-hypemodellen"
+                                target="_blank">den här sidan</a> på SMHIs webbplats för mer
+                        information.
+                </p>
+                <p>
+                        <b>S-HYPE</b> är en modelluppsättning för Sverige där beräkning av
+                        avrinning och näringsämnestransporter utförs i delområden som
+                        motsvarar tillrinningsområden till de vattenförekomster som finns i
+                        SVAR. Vattenföring och vattenkvalitet i ett valt delområde inkluderar
+                        bidrag från alla områden uppströms det valda området.
+                        Regleringsrutiner för landets viktigaste regleringsmagasin (ca 200
+                        stycken) har använts i beräkningarna. Se <a
+                                href="/om-shype"
+                                target="_blank">den här sidan</a> på SMHIs webbplats för mer
+                        information.
+                </p>
+                <p>
+                        <b>Kustzonsmodellen</b> är en endimensionell modell applicerad i
+                        kustvattenförekomster som finns i SVAR. Angränsande vattenförekomster
+                        är kopplade och utbyter vatten med olika egenskaper. Från land kommer
+                        tillrinning i form av vattenföring och näringsämnen modellberäknade
+                        med S-HYPE. Via de
+                        yttre vattenförekomsterna sker även ett utbyte med utsjön. Se <a
+                                href="/om-kustzonsmodellen"
+                                target="_blank"> den här sidan </a>på SMHIs webbplats för mer
+                        information om modellen.
+                </p>
+                <p>
+                        <b>Vattenwebb</b> ger tillgång till simuleringar av vattenföring
+                        (m³/s), kvävetransport (kg) och fosfortransport (kg) på land.
+                        Vattenföringen finns dessutom beräknad med eller utan uppdatering.
+                        Vid uppdatering ersätts det modellberäknade värdet med ett observerat
+                        värde i punkter där vattenföringsmätningar genomförs. Beräkningarna
+                        utförs med dagligt tidssteg för vattenkvalitet och vattenkvantitet.
+                        Vattenföring finns tillgängligt som medelvärden med upplösningen
+                        dygn, månad eller år, medan vattenkvalitet finns tillgängligt som
+                        ackumulerad massa per månad eller år. För kustvattenförekomster finns simulerade
+                        dagliga djupprofiler för temperatur (˚C), salthalt (PSU), ammonium
+                        (mg/m³), nitrat (mg/m³), totalkväve (mg/m³), fosfat (mg/m³),
+                        totalfosfor (mg/m³), klorofyll-a (mg chl/m³), syre (mg/l), siktdjup (m) och
+                        omsättningstid (dagar). För varje kustvattenförekomst finns även
+                        summerad tillrinning från land tillgänglig.
+                </p>
+                <p>
+                        Informationen omfattas av följande <a class="licenselink" href="/information-öppna-data" target="_blank">licensavtal</a> samt <a class="referencelink" href="https://vattenwebb.smhi.se/om-vattenwebb" target="_blank">Referenser</a>
+                </p>
+        <p>
+            <a href="https://vattenwebb.smhi.se/tillgänglighetsredogörelse" target="_blank">Tillgänglighetsredogörelse för SMHI Vattenwebb</a>
+        </p>
+
+        </div>
+
+        <script id="municipality-tmpl" type="text/x-tmpl">
+        <div class="municipality">
+        <h2><%= kommunnamn %></h2>
+        <img class="workerimg" src="img/PLATE.jpg" alt="">
+        <div class="float-left">
+        <p>Det blå markerade området med utlopp i  <%= kommunnamn %> hämtas som separata Excel filer och packas ihop till en zip-fil.</p>
+         <p>Informationen omfattas av följande <a class="licenselink" href="/information-öppna-data">licensavtal</a></p>
+        <p>
+    <br><br>
+            <a href="<%= municipalityUrl %>" download="<%= filename %>" class="button gradient">Ladda ned data (xls)</a>&nbsp
+        </p>
+        </div>
+        </div>
+        </script>
+
+        <script id="modeller-popup-shype-tmpl" type="text/x-tmpl">
+        <h2>Delavrinningsområde</h2>
+                <table>
+                <tr>
+                                <td class="metadata-header">Delavrinningsområdets SUBID</td>
+                                <td><%= subid %></td>
+                </tr>
+                <tr>
+                                <td class="metadata-header">Delavrinningsområdets AROID</td>
+                                <td class="nowrap"><% if(aroid) { %><%= aroid %><% } %></td>
+                </tr>
+      <tr>
+        <td class="metadata-header">Delavrinningsområdets namn</td>
+        <td><% if(name) { %><%= name %><% } %></td>
+      </tr>
+    <tr>
+    <td class="metadata-header">Huvudavrinningsområde</td>
+    <td><% if(haro) { %><%= haro.haroNumber %> <%= haro.name %><% } %></td>
+    </tr>
+    <tr>
+    <td class="metadata-header">Utloppspunkt, SWEREF99</td>
+    <td><% if(outlet != null) { %><%= `${ outlet.properties.latitude.toFixed(0) }, ${ outlet.properties.longitude.toFixed(0) }` %><% } %></td>
+    </tr>
+        <tr>
+                <td class="metadata-header">Delavrinningsområdets area [km²]</td>
+                <td><%= `${ ( basin.area / 1E6 ).toSv(3) }` %></td>
+        </tr>
+        <tr>
+                <td class="metadata-header">Delavrinningsområdets sjöprocent</td>
+    <td><%= `${ ( soilAndLandUsage.local.landUse.lakeAndRivers * 100 ).toSv(2) }%` %></td>
+        </tr>
+        <tr>
+                <td class="metadata-header">Avrinningsområdets area [km²]</td>
+                <td><%= `${ ( ( basin.upstreamArea + basin.area ) / 1E6).toSv(3) }` %></td>
+        </tr>
+        <tr>
+                <td class="metadata-header">Avrinningsområdets sjöprocent</td>
+    <td><%= `${ ( soilAndLandUsage.catchmentArea.landUse.lakeAndRivers * 100 ).toSv(2) }%`  %></td>
+        </tr>
+    </table>
+
+        <p>Informationen omfattas av följande <a class="licenselink" href="/information-öppna-data">licensavtal</a></p>
+        <p>
+                <a href="<%= excelUrl %>" download="<%= filename %>" id="downloadButton" class="button gradient">Ladda ned data (xls)</a>&nbsp
+        </p>
+
+  </script>
+        <script id="modeller-popup-kz-tmpl" type="text/x-tmpl">
+        <h2>Vattenförekomst</h2>
+                <table>
+                        <tr>
+                                <td>Vattenförekomst-ID</td>
+                                <td class="nowrap"><%= eucd %></td>
+            </tr>
+            <tr>
+                                <td>Bassängsnummer</td>
+                                <td><%= waterbody.basinId %></td>
+                </tr>
+                <tr>
+                                <td>Vattenförekomstnamn</td>
+                                <td><%= name %></td>
+                </tr>
+                <tr>
+                                <td>Vattendistrikt</td>
+                                <td><%= district %></td>
+                        </tr>
+                <tr>
+                                <td>Position, SWEREF99</td>
+                                <td><%= `${ latitude.toFixed(0) }, ${ longitude.toFixed(0) }` %></td>
+                </tr>
+                <tr>
+                                <td>Maxdjup [m]</td>
+                                <td><%= maxDepth %></td>
+                </tr>
+                        <tr>
+                                <td>Area [km²]</td>
+                                <td><%= `${ ( waterbody.area / 2E6 ).toSv(3) }` %></td>
+                </tr>
+                <tr>
+                                <td>Volym [km³]</td>
+                                <td><%= `${ ( waterbody.volume / 1E9 ).toSv(3) }` %></td>
+                </tr>
+        </table>
+                <p>Informationen omfattas av följande <a class="licenselink" href="/information-öppna-data">licensavtal</a></p>
+                <p>
+                        <a href="<%= excelUrl %>" download="<%= filename %>" id="downloadButton" class="button gradient">Ladda ned data (xls)</a>&nbsp
+                </p>
+  </script>
+
+        <script>
+        var	waterwebmapUrl = "http://vattenwebb-utv.smhi.se/tiles/vw";
+        </script>
+        <script src="requirejs-2.1.14.min.js" data-main="main"></script>
+
+        <!-- Kundo button -->
+        <script>
+    var _kundo = _kundo || {};
+    _kundo["image"] = "img/Tyck_till_small.png";
+    _kundo["top"] = "200px";
+    _kundo["org"] = "vattenweb";
+    _kundo["lang"] = "sv";
+    _kundo["image_alt"] = "Tyck till";
+    _kundo["open_startpage"] = true;
+    _kundo["target"] = "_blank";
+
+
+    (function() {
+        function async_load(){
+            var s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.async = true;
+            s.src = ('https:' == document.location.protocol ? 'https://static-ssl' : 'http://static') +
+            '.kundo.se/embed.js';
+            var x = document.getElementsByTagName('script')[0];
+            x.parentNode.insertBefore(s, x);
+        }
+        if (window.attachEvent)
+            window.attachEvent('onload', async_load);
+        else
+            window.addEventListener('load', async_load, false);
+    })();
+        </script>
+
+</div>
+</body>
+</html>
+

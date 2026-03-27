@@ -54,16 +54,92 @@
             </div>
             <span id="status-fish" class="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700">Mock</span>
           </div>
-          <p id="value-fish" class="text-4xl font-bold text-slate-900">--</p>
-          <p class="mt-2 text-sm text-slate-500">Fish today</p>
+          <div class="flex flex-col gap-2">
+            <div class="flex items-baseline gap-3">
+              <p id="value-fish-total" class="text-4xl font-bold text-slate-900">--</p>
+              <p class="text-sm font-medium text-slate-500">net today</p>
+            </div>
+            <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-600">
+              <span>Up: <span id="value-fish-up" class="font-semibold text-slate-900">--</span></span>
+              <span>Down: <span id="value-fish-down" class="font-semibold text-slate-900">--</span></span>
+              <span>Year total: <span id="value-fish-year" class="font-semibold text-slate-900">--</span></span>
+            </div>
+            <div class="text-xs text-slate-500">
+              <span>Δ vs yesterday: <span id="delta-fish-yday" class="font-medium">--</span></span>
+              <span class="mx-2">•</span>
+              <span>Δ vs last week: <span id="delta-fish-week" class="font-medium">--</span></span>
+            </div>
+          </div>
           <div class="mt-4">
             <p class="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">Trend</p>
             <svg id="spark-fish" viewBox="0 0 160 44" class="h-11 w-full">
               <path d="" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
+            <div class="mt-1 flex items-center justify-between text-[11px] text-slate-400">
+              <span id="spark-fish-start">--</span>
+              <span id="spark-fish-end">--</span>
+            </div>
           </div>
           <div id="source-fish" class="mt-5 rounded-xl bg-slate-50 p-3 text-xs text-slate-600">
             Source: fiskdata.se (mock fallback)
+          </div>
+        </section>
+
+        <section class="rounded-2xl bg-white p-6 shadow-soft ring-1 ring-slate-200">
+          <div class="mb-5 flex items-start justify-between">
+            <div>
+              <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500">River Conditions</h2>
+              <p class="mt-1 text-lg font-semibold text-slate-900">Byskeälven (from fish counter)</p>
+            </div>
+            <span id="status-river" class="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700">Mock</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="rounded-xl bg-slate-50 p-4 ring-1 ring-slate-200">
+              <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Water temp</p>
+              <p class="mt-2 text-2xl font-bold text-slate-900"><span id="value-river-temp">--</span> °C</p>
+              <p id="value-river-temp-at" class="mt-1 text-xs text-slate-500">--</p>
+            </div>
+            <div class="rounded-xl bg-slate-50 p-4 ring-1 ring-slate-200">
+              <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Flow</p>
+              <p class="mt-2 text-2xl font-bold text-slate-900"><span id="value-river-flow">--</span> m³/s</p>
+              <p id="value-river-flow-at" class="mt-1 text-xs text-slate-500">--</p>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <p class="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">Trend (temp)</p>
+            <svg id="spark-river-temp" viewBox="0 0 160 44" class="h-11 w-full">
+              <path d="" fill="none" stroke="lightgreen" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <div class="mt-1 flex items-center justify-between text-[11px] text-slate-400">
+              <span id="spark-river-temp-start">--</span>
+              <span id="spark-river-temp-end">--</span>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <p class="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">Trend (flow)</p>
+            <svg id="spark-river-flow" viewBox="0 0 160 44" class="h-11 w-full">
+              <path d="" fill="none" stroke="rgb(3, 190, 252)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <div class="mt-1 flex items-center justify-between text-[11px] text-slate-400">
+              <span id="spark-river-flow-start">--</span>
+              <span id="spark-river-flow-end">--</span>
+            </div>
+          </div>
+
+          <div class="mt-5 flex items-center justify-between rounded-xl bg-slate-50 p-3 text-xs text-slate-600">
+            <div id="river-video">
+              Latest video: --
+            </div>
+            <a id="river-video-link" href="#" target="_blank" rel="noopener noreferrer" class="hidden font-medium text-brand-600 underline hover:text-brand-700">
+              Open
+            </a>
+          </div>
+
+          <div id="source-river" class="mt-3 rounded-xl bg-slate-50 p-3 text-xs text-slate-600">
+            Source: fiskdata.se
           </div>
         </section>
 
@@ -82,6 +158,10 @@
             <svg id="spark-snow" viewBox="0 0 160 44" class="h-11 w-full">
               <path d="" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
+            <div class="mt-1 flex items-center justify-between text-[11px] text-slate-400">
+              <span id="spark-snow-start">--</span>
+              <span id="spark-snow-end">--</span>
+            </div>
           </div>
           <div id="source-snow" class="mt-5 rounded-xl bg-slate-50 p-3 text-xs text-slate-600">
             Source: smhi.se
@@ -91,21 +171,46 @@
         <section class="rounded-2xl bg-white p-6 shadow-soft ring-1 ring-slate-200">
           <div class="mb-5 flex items-start justify-between">
             <div>
-              <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Water Level</h2>
-              <p class="mt-1 text-lg font-semibold text-slate-900">Riverapp Station</p>
+              <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Water & Flow</h2>
+              <p class="mt-1 text-lg font-semibold text-slate-900">Byskeälven (river stage + streamflow)</p>
             </div>
             <span id="status-water" class="rounded-full bg-sky-100 px-2.5 py-1 text-xs font-semibold text-sky-700">Mock</span>
           </div>
-          <p id="value-water" class="text-4xl font-bold text-slate-900">-- m</p>
-          <p class="mt-2 text-sm text-slate-500">Current station level</p>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p id="value-water" class="text-3xl font-bold text-slate-900">-- m</p>
+              <p class="mt-1 text-xs text-slate-500">River stage</p>
+            </div>
+            <div>
+              <p id="value-water-flow" class="text-3xl font-bold text-slate-900">-- m³/s</p>
+              <p id="value-water-flow-at" class="mt-1 text-xs text-slate-500">Streamflow (SMHI)</p>
+            </div>
+          </div>
           <div class="mt-4">
-            <p class="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">Trend</p>
+            <p class="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">River stage trend</p>
             <svg id="spark-water" viewBox="0 0 160 44" class="h-11 w-full">
               <path d="" fill="none" stroke="#0ea5e9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
+            <div class="mt-1 flex items-center justify-between text-[11px] text-slate-400">
+              <span id="spark-water-start">--</span>
+              <span id="spark-water-end">--</span>
+            </div>
+          </div>
+          <div class="mt-4">
+            <p class="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">Streamflow trend (SMHI)</p>
+            <svg id="spark-water-flow" viewBox="0 0 160 44" class="h-11 w-full">
+              <path d="" fill="none" stroke="#0284c7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <div class="mt-1 flex items-center justify-between text-[11px] text-slate-400">
+              <span id="spark-water-flow-start">--</span>
+              <span id="spark-water-flow-end">--</span>
+            </div>
           </div>
           <div id="source-water" class="mt-5 rounded-xl bg-slate-50 p-3 text-xs text-slate-600">
             Source: riverapp.net
+          </div>
+          <div id="source-water-flow" class="mt-3 rounded-xl bg-slate-50 p-3 text-xs text-slate-600">
+            Source: smhi.se (Vattenwebb)
           </div>
         </section>
 
@@ -124,6 +229,10 @@
             <svg id="spark-tips" viewBox="0 0 160 44" class="h-11 w-full">
               <path d="" fill="none" stroke="#8b5cf6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
+            <div class="mt-1 flex items-center justify-between text-[11px] text-slate-400">
+              <span id="spark-tips-start">--</span>
+              <span id="spark-tips-end">--</span>
+            </div>
           </div>
           <div id="source-tips" class="mt-5 rounded-xl bg-slate-50 p-3 text-xs text-slate-600">
             Source: ifiske.se
@@ -139,8 +248,31 @@
           : "https://YOUR-BACKEND-URL-HERE";
 
       const state = {
-        fishCount: 142,
-        snowDepthCm: 68,
+        fish: {
+          today: { up: 0, down: 0, total: 0 },
+          yesterday: { up: 0, down: 0, total: 0 },
+          lastWeek: { up: 0, down: 0, total: 0 },
+          yearTotal: { up: 3434, down: 34, total: 3400 },
+          deltas: {
+            vsYesterday: { up: 0, down: 0, total: 0 },
+            vsLastWeek: { up: 0, down: 0, total: 0 }
+          }
+        },
+        river: {
+          temperatureC: 8.0,
+          temperatureAt: new Date().toISOString(),
+          flowM3s: 60.0,
+          flowAt: new Date().toISOString(),
+          tempTrend: [],
+          flowTrend: [],
+          latestVideo: null
+        },
+        smhiFlow: {
+          latestM3s: null,
+          latestAt: null,
+          trend: []
+        },
+        snowDepthCm: null,
         waterLevelM: 1.74,
         tip: "Best bite early morning near moving current."
       };
@@ -150,6 +282,19 @@
         water: [1.7, 1.72, 1.73, 1.74, 1.74],
         tips: [52, 55, 54, 56, 57]
       };
+      const trendTimeState = (() => {
+        const stepMs = 5 * 60 * 1000;
+        const now = Date.now();
+        const seed = (values) => values.map((_, i) => now - (values.length - 1 - i) * stepMs);
+        return {
+          fish: seed(trendState.fish),
+          snow: seed(trendState.snow),
+          water: seed(trendState.water),
+          tips: seed(trendState.tips),
+          riverTemp: [],
+          riverFlow: []
+        };
+      })();
       const TREND_POINTS = 12;
 
       function setStatus(metric, status) {
@@ -180,6 +325,38 @@
         if (trendState[key].length > TREND_POINTS) {
           trendState[key].shift();
         }
+
+        trendTimeState[key].push(Date.now());
+        if (trendTimeState[key].length > TREND_POINTS) {
+          trendTimeState[key].shift();
+        }
+      }
+
+      function renderSparkTimeline(metric) {
+        const times = trendTimeState[metric];
+        const startEl = document.getElementById(`spark-${metric}-start`);
+        const endEl = document.getElementById(`spark-${metric}-end`);
+        if (!startEl || !endEl || !times?.length) {
+          return;
+        }
+        const start = new Date(times[0]);
+        const end = new Date(times[times.length - 1]);
+        startEl.textContent = start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        endEl.textContent = end.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      }
+
+      function setSparkSeries(svgId, points) {
+        drawSparkline(svgId, points);
+      }
+
+      function setSparkTimeRange(startId, endId, times) {
+        const startEl = document.getElementById(startId);
+        const endEl = document.getElementById(endId);
+        if (!startEl || !endEl || !times?.length) return;
+        const start = new Date(times[0]);
+        const end = new Date(times[times.length - 1]);
+        startEl.textContent = start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        endEl.textContent = end.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
       }
 
       function drawSparkline(svgId, points) {
@@ -205,15 +382,65 @@
       }
 
       function renderDashboard(updatedAt) {
-        document.getElementById("value-fish").textContent = String(state.fishCount);
-        document.getElementById("value-snow").textContent = `${state.snowDepthCm} cm`;
+        const fish = state.fish;
+        document.getElementById("value-fish-total").textContent = String(fish.today.total);
+        document.getElementById("value-fish-up").textContent = String(fish.today.up);
+        document.getElementById("value-fish-down").textContent = String(fish.today.down);
+        document.getElementById("value-fish-year").textContent = String(fish.yearTotal.total);
+        document.getElementById("delta-fish-yday").textContent =
+          `${fish.deltas.vsYesterday.total >= 0 ? "+" : ""}${fish.deltas.vsYesterday.total}`;
+        document.getElementById("delta-fish-week").textContent =
+          `${fish.deltas.vsLastWeek.total >= 0 ? "+" : ""}${fish.deltas.vsLastWeek.total}`;
+        document.getElementById("value-snow").textContent =
+          Number.isFinite(state.snowDepthCm) ? `${state.snowDepthCm} cm` : "--";
         document.getElementById("value-water").textContent = `${state.waterLevelM.toFixed(2)} m`;
+        document.getElementById("value-water-flow").textContent =
+          Number.isFinite(state.smhiFlow?.latestM3s) ? `${Number(state.smhiFlow.latestM3s).toFixed(2)} m³/s` : "--";
+        document.getElementById("value-water-flow-at").textContent =
+          state.smhiFlow?.latestAt ? `SMHI update: ${new Date(state.smhiFlow.latestAt).toLocaleString()}` : "Streamflow (SMHI)";
         document.getElementById("value-tips").textContent = state.tip;
         document.getElementById("last-updated").textContent = `Last updated: ${new Date(updatedAt).toLocaleString()}`;
         drawSparkline("spark-fish", trendState.fish);
         drawSparkline("spark-snow", trendState.snow);
         drawSparkline("spark-water", trendState.water);
         drawSparkline("spark-tips", trendState.tips);
+        renderSparkTimeline("fish");
+        renderSparkTimeline("snow");
+        renderSparkTimeline("water");
+        renderSparkTimeline("tips");
+        const smhiFlowTrend = (state.smhiFlow?.trend || []).filter((p) => Array.isArray(p) && p.length >= 2);
+        setSparkSeries("spark-water-flow", smhiFlowTrend.map((p) => Number(p[1])));
+        setSparkTimeRange("spark-water-flow-start", "spark-water-flow-end", smhiFlowTrend.map((p) => Number(p[0])));
+
+        document.getElementById("value-river-temp").textContent = Number(state.river.temperatureC).toFixed(1);
+        document.getElementById("value-river-flow").textContent = Number(state.river.flowM3s).toFixed(1);
+        document.getElementById("value-river-temp-at").textContent = `Updated: ${new Date(state.river.temperatureAt).toLocaleString()}`;
+        document.getElementById("value-river-flow-at").textContent = `Updated: ${new Date(state.river.flowAt).toLocaleString()}`;
+
+        const tempPoints = (state.river.tempTrend || []).map((p) => p[1]);
+        const tempTimes = (state.river.tempTrend || []).map((p) => p[0]);
+        setSparkSeries("spark-river-temp", tempPoints);
+        setSparkTimeRange("spark-river-temp-start", "spark-river-temp-end", tempTimes);
+
+        const flowPoints = (state.river.flowTrend || []).map((p) => p[1]);
+        const flowTimes = (state.river.flowTrend || []).map((p) => p[0]);
+        setSparkSeries("spark-river-flow", flowPoints);
+        setSparkTimeRange("spark-river-flow-start", "spark-river-flow-end", flowTimes);
+
+        const videoEl = document.getElementById("river-video");
+        const linkEl = document.getElementById("river-video-link");
+        const v = state.river.latestVideo;
+        if (v?.url && linkEl) {
+          linkEl.href = v.url;
+          linkEl.classList.remove("hidden");
+          const parts = [v.dateTime, v.species, typeof v.lengthCm === "number" ? `${v.lengthCm} cm` : null]
+            .filter(Boolean)
+            .join(" · ");
+          if (videoEl) videoEl.textContent = `Latest video: ${parts || "available"}`;
+        } else {
+          if (linkEl) linkEl.classList.add("hidden");
+          if (videoEl) videoEl.textContent = "Latest video: --";
+        }
       }
 
       async function refreshDashboard() {
@@ -229,22 +456,29 @@
           }
 
           const data = await response.json();
-          state.fishCount = Number(data.fish.value);
-          state.snowDepthCm = Number(data.snow.value);
+          state.fish = data.fish.value;
+          state.river = data.river.value;
+          state.smhiFlow = data.smhiFlow.value;
+          state.snowDepthCm = Number.isFinite(Number(data.snow.value)) ? Number(data.snow.value) : null;
           state.waterLevelM = Number(data.water.value);
           state.tip = String(data.tips.value);
 
           setStatus("fish", data.fish.status);
+          setStatus("river", data.river.status);
           setStatus("snow", data.snow.status);
           setStatus("water", data.water.status);
           setStatus("tips", data.tips.status);
           setSource("fish", data.fish.source, data.fish.status, data.fish.error);
+          setSource("river", data.river.source, data.river.status, data.river.error);
           setSource("snow", data.snow.source, data.snow.status, data.snow.error);
           setSource("water", data.water.source, data.water.status, data.water.error);
+          setSource("water-flow", data.smhiFlow.source, data.smhiFlow.status, data.smhiFlow.error);
           setSource("tips", data.tips.source, data.tips.status, data.tips.error);
 
-          pushTrendValue("fish", state.fishCount);
-          pushTrendValue("snow", state.snowDepthCm);
+          pushTrendValue("fish", Number(state.fish?.today?.total ?? 0));
+          if (Number.isFinite(state.snowDepthCm)) {
+            pushTrendValue("snow", state.snowDepthCm);
+          }
           pushTrendValue("water", Number(state.waterLevelM.toFixed(2)));
           pushTrendValue("tips", Math.max(0, state.tip.length));
 

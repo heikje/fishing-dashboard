@@ -1,0 +1,995 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Fiskdata.se - Fiskräkning i Fällfors, Byskeälven</title>
+    <script src="/raknare/bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
+    <!--
+    <script type="text/javascript" src="/raknare/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!--
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+-->
+    <script src="/raknare/bower_components/toastr/toastr.min.js" type="text/javascript"></script>
+    
+    <script src="/raknare/bower_components/highcharts/highcharts.js" type="text/javascript"></script>
+	<script src="/raknare/bower_components/highcharts/modules/exporting.js" type="text/javascript"></script>
+	<script src="/raknare/bower_components/highcharts/highcharts-more.js" type="text/javascript"></script>
+
+    <script src="/raknare/bower_components/datatables/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="/raknare/bower_components/datatables-tabletools/js/dataTables.tableTools.js"type="text/javascript"></script>
+    <script src="/raknare/bower_components/underscore/underscore-min.js" type="text/javascript"></script>
+	
+    <script type="text/javascript" src="/raknare/bower_components/moment/min/moment.min.js"></script>
+	<script type="text/javascript" src="/raknare/bower_components/moment/locale/sv.js"></script>
+	<script type="text/javascript" src="/raknare/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+	<link rel="stylesheet" href="/raknare/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    
+    <link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet"> <!-- 3 KB -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script> <!-- 16 KB -->
+   
+	
+    
+   
+    <link rel="stylesheet" type="text/css" href="/raknare/bower_components/datatables/media/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lexend">
+    
+    <link href="/raknare/_img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link rel="stylesheet" href="/raknare/_shared/style.css">
+    
+	
+
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script> 
+	
+	<link rel="stylesheet" href="/raknare/_inc/dist/css/leaflet.extra-markers.min.css" />
+    <script src="/raknare/_inc/dist/js/leaflet.extra-markers.min.js"></script> 
+      
+  </head>
+  
+
+<style>
+	a {
+		color: #FFA500;
+	}
+	.banner-logo {
+		text-align: center;
+		max-height: 100px;
+		width: 100%;
+	}
+	.banner-logo-image {
+		padding-top: 20px;
+		max-height: 80px;
+	}
+	
+	.live-content {
+		margin-top: 20px;
+		background-color: rgb(36, 79, 120);
+		border-radius: 0px;
+		width: 100%;
+		
+	}
+	
+	.live-inner-content {
+		margin: 10px;
+		margin-bottom: 40px;
+		padding: 10px;
+		background-color: #002133;
+		border-radius: 0px;
+		max-width: 100%;
+	}
+
+	.orange-left-border {
+		border-left: 2px solid #FFA500;
+		margin-left: 20px;
+		
+	}
+
+	.img-responsive {
+		display: block;
+		max-width: 100%;
+		height: auto;
+		/*border: 1px solid #FFF;*/
+	}
+
+	#live_loop {
+		width: 100%;
+		height: auto;
+	}	
+
+	.table {
+		--bs-table-bg: 0;
+		--bs-table-color: white;
+	}
+
+	.li-video {
+		display: inline-block;
+		width: 120px;
+	}
+	.videoSlider {
+		white-space: nowrap;
+		overflow-x: scroll;
+		overflow-y: hidden;
+		/*width: 100%;*/
+	}
+	.panel-body {
+		padding: 15px;
+	}
+	.small, small {
+		font-size: 75%;
+	}
+
+	.ul-video {
+		margin: 0;
+		padding: 0;
+	}
+
+	.li-video img {
+		width: 95%;
+
+	}
+
+	.embed-responsive video {
+		width: 100% !important;
+		height: auto;
+	}
+
+	button {
+		background-color: #026aba66;
+		color: white;
+		padding: 2px;
+		text-align: center;
+		text-decoration: none;
+		font-size: 16pt;
+		font-family: Lexend;
+		/* margin: 4px 2px; */
+		transition-duration: 0.4s;
+		cursor: hand;
+		border-radius: 0;
+		border: 1px solid #FFFFFF;
+	}	
+	
+	#tbl_species {
+        width: 100%;
+        font-family: 'Lexend', sans-serif;
+        font-size: 0.9rem;
+        background-color: #002133;
+        border-collapse: collapse;
+    }
+    
+    #tbl_species th,
+    #tbl_species td {
+        padding: 0.3rem;
+        border: 1px solid #003366;
+    }
+    
+    #tbl_species th {
+        background-color: #003366;
+        color: #FFA500;
+        font-weight: normal;
+        text-align: right;
+    }
+    
+    #tbl_species td {
+        color: white;
+    }
+    
+    #tbl_species tr:nth-of-type(odd) {
+        background-color: #002b44;
+    }
+    
+    #tbl_species tr:nth-of-type(even) {
+        background-color: #003366;
+    }
+    
+    
+    #tbl_species tr:hover td {
+        border-top: 2px solid #FFA500;
+        border-bottom: 1px solid #FFA500;
+    }
+
+    #tbl_species th:first-child,
+    #tbl_species td:first-child {
+        text-align: left;
+    }
+
+    #tbl_species td:not(:first-child) {
+        text-align: right;
+    }
+
+    .up-arrow, .down-arrow {
+        font-size: 14px; /* Justera storleken efter behov */
+        line-height: 1;
+        vertical-align: middle;
+        margin-right: 2px;
+    }
+
+    .up-arrow {
+        color: #4CAF50; /* Grön färg för uppåtpil */
+    }
+
+    .down-arrow {
+        color: #FFA500; /* Orange färg för nedåtpil */
+    }
+
+    .horizontal-line {
+        color: #FFA500;
+    }
+
+	.table-dark {
+		background-color: #002133;
+	}
+
+	.table-dark th,
+	.table-dark td {
+		border-color: #003366;
+	}
+
+
+</style>
+
+<body>
+
+  	<main>
+		<div class="container-md">
+		<div class="row">
+				<div class="col-md-12">
+					<a href="/"><img src="/raknare/_img/logo_width.svg" class="mt-1" style="max-width: 28%;"/></a>
+				</div>
+			</div>
+		</div>
+
+	  	<div class="container-md mt-3 live-content">
+		  	
+			<div class="row orange-left-border">
+				<div class="col-md-12 ">
+					<h1 class="text-white inline">&nbsp;&nbsp;Fällfors, Byskeälven</h1>
+				</div>
+				
+			</div>
+			
+
+			 <!-- ev messages -->
+						
+					
+
+            <div class="row">
+			
+				<div class="col-md-12 orange-left-border ml-4">
+					<!-- <h2>Presentation av data</h2> -->
+				</div>
+			</div>
+
+			<div class="row live-inner-content justify-content-md-center">
+								<div class="col-md-6 " >
+					<img src='/data/byske/2025/timeLapse/tunnel/latest.jpg' class='img-responsive center' id='liveImage'>				</div>
+
+				
+				<div class="col-md-6 >
+					<div class="panel panel-default no-border" id="tableLiveTableContainer" >
+						<table class="table" id="tableLiveTable">
+							<thead>
+								<tr style="height:5%" class="small">
+									<th class="" style="vertical-align: middle;">&nbsp;</th>
+									<th class="text-right" style="vertical-align: middle;">Upp</th>
+									<th class="text-right" style="vertical-align: middle;">Ner</th>
+									<th class="text-right" style="vertical-align: middle;">Totalt</th>
+								</tr>
+							</thead>
+							<tr style="height:35%" class="h2">
+								<td style="vertical-align: middle;">Idag</td>
+								<td class="text-right" style="vertical-align: middle;">0</td>
+								<td class="text-right" style="vertical-align: middle;">0</td>
+								<td class="text-right" style="vertical-align: middle;">0</td>
+							</tr>
+							<tr style="height:20%">
+								<td style="vertical-align: middle;">Igår</td>
+								<td class="text-right" style="vertical-align: middle;">0</td>
+								<td class="text-right" style="vertical-align: middle;">0</td>
+								<td class="text-right" style="vertical-align: middle;">0</td>
+							</tr>
+							<tr style="height:20%">
+								<td style="vertical-align: middle;">Senaste veckan</td>
+								<td class="text-right" style="vertical-align: middle;">0</td>
+								<td class="text-right" style="vertical-align: middle;">0</td>
+								<td class="text-right" style="vertical-align: middle;">0</td>
+							</tr>
+							<tr style="height:20%">
+								<td style="vertical-align: middle;">Totalt år</td>
+								<td class="text-right" style="vertical-align: middle;">3434</td>
+								<td class="text-right" style="vertical-align: middle;">34</td>
+								<td class="text-right" style="vertical-align: middle;">3400  </td>
+							</tr>
+						</table>
+						
+												<div class="panel-footer" id="tableLiveFooter">
+							<div class="row">
+								<div class="col-xs-2 text-center "></div>
+								<div class="col-xs-8 text-center ">	
+									<small><em>Senaste uppdatering december 2025</em></small>	        							
+								</div>
+								<div class="col-xs-2 text-left">
+									<!-- <small><span class="glyphicon glyphicon-question-sign text-right" aria-hidden="true"></span></small> -->
+								</div>
+							</div>	
+						</div>
+											</div>
+				</div>
+									
+						
+									<div class="panel panel-default" id="videoLatestContainer">
+				<div class="panel-header orange-left-border m-4">
+					<h3 class="panel-title">&nbsp;&nbsp;Senaste video</h3>
+				</div>
+				<div class="row live-inner-content justify-content-md-center panel-body videoSlider small videoLatest text-center"><div class="loader"><img src="/raknare/_img/loader_bar.gif"><p><br>Laddar data</p></div></div>
+			</div>
+			
+
+			<div class="panel panel-default" id="videoSelectionContainer" style="">
+				<div class="panel-header orange-left-border m-4">
+					<h3 class="panel-title">&nbsp;&nbsp;Urval video</h3>
+				</div>
+				<div class="row live-inner-content justify-content-md-center panel-body videoSlider small videoLatest text-center"><div class="loader"><img src="/raknare/_img/loader_bar.gif"><p><br>Laddar data</p></div></div>
+			</div>
+			
+		
+        
+						
+
+			 <!-- DIAGRAM -->
+			 <div class="panel panel-default">
+			 	<div class="panel-header orange-left-border m-4">
+						<h3 class="panel-title">&nbsp;&nbsp;Preliminära resultat 2025</h3>
+				</div>
+				<div class="panel-body">
+					<div id="chartContainer">Laddar diagram...</div>
+				</div>
+				
+			</div> <!-- Slut panel diagram -->
+
+			<div class="panel panel-default" style="width: 100%;">
+				<div class="panel-header orange-left-border m-4">
+					<h3 class="panel-title">&nbsp;&nbsp;Månadsvis artfördelning</h3>
+				</div>
+				
+					
+				<div class="panel-body">
+					<div id="tbl_species_descriptionText"></div>
+					<div class="table-responsive" style="width: 100%; overflow-x: auto;">
+						<table id="tbl_species" class="table table-striped table-hover" style="width: 100%;">
+						</table>
+					</div>
+					<span style='font-size: 12px;'>
+						Siffrorna i tabellen är inte manuellt granskade och kan innehålla felaktigheter, ta därför siffrorna med en nypa vatten. Denna tabell uppdateras en gång per dygn. 
+					</span>
+				</div>
+			
+			
+			
+			</div>
+			
+					
+			
+							<div class="panel panel-default">
+					<div class="panel-header orange-left-border m-4">
+						<h3 class="panel-title">&nbsp;Räknarinfo</h3>
+					</div>       
+
+
+					<div class="row live-inner-content panel-body">
+						<div class="col-sm-12 col-md-5"> <p> Uppvandringen av lax pågår under hela sommaren och älven fylls på med fisk ända fram till leken som börjar under hösten. Laxens vandring börjar långt ute i Östersjön och målet för resan är i detta fall är Byskeälven. 28 kilometer uppströms Byskeälven från havet ligger Fällfors. Här har Skellefteå kommun en fiskräknare för att kunna följa laxen och öringens uppvandring i övervakningssyfte. Fiskräknaren är utrustad med en kamera vilket förutom bedömning av storlek även möjliggör bedömning av art. </p></div>
+
+						<div class="fotorama col-sm-12 col-md-7" data-nav="thumbs" data-width="100%" data-shuffle="false" ></div>
+					</div>
+
+					
+				</div> <!-- Slut panel diagram -->
+		    
+			<!-- Information om fiskräkning -->
+	    <div class="panel panel-default">
+	        <div class="panel-header orange-left-border m-4">
+				
+	        	<h3 class="panel-title">&nbsp;Allmänt om fiskräkning/fiskobservation</h3>
+	        </div>
+			<div class="row live-inner-content">
+			
+<style>
+	/* Rubriker */
+div.panel-body > h2 {
+  padding-top: 15px;
+  padding-bottom: 0px;
+}
+
+/* Översta rubriken */
+div.panel-body > h2:first-of-type {
+  padding-top: 0px;
+}
+
+/* Textstycken */
+div.panel-body > p {
+  padding: 4px;
+}
+
+/* Bildcontainer */
+div.panel-body > p.image-container {
+  padding: 10px;
+}
+
+/* Bildtext */
+div.panel-body > p > span {
+  font-style: italic;
+}
+</style>
+ <div class="panel-body">
+  <h2>Fiskräkning</h2>
+  <p>
+  På denna sida presenteras otolkad och ogranskad live-data direkt från fiskräknaren vid Fällfors . Fiskräknaren är tillverkad av det isländska företaget <a href="http://riverwatcher.is" target="_new">Vaki</a> och är av typen Riverwatcher.
+  </p>
+  <p>
+  Fiskräknaren består i princip av två skannerplattor i en ram som fisken simmar igenom. I skannerplattorna sitter två rader med infraröda dioder som skapar en osynlig ljusgardin vilken kontinuerligt sveper genom vattnet och registrerar alla objekt som passerar räknaren. I anslutning till skannerplattorna finns dessutom en kamera som spelar in en videosekvens av det passerande objektet. 
+  </p>
+  <p>
+  När ett objekt passerar skannerplattorna bryts de infraröda ljustrålarna och två stycken skuggbilder av objektet skapas. Informationen från skannerplattorna analyseras av fiskräknarens dator som gör en första grov kontroll om det passerande objektet skall klassificeras som en fisk eller ej. Trots att denna funktion sorterar bort stora mängder skräpregistreringar händer det av och till att enstaka föremål, växtrester eller bubbelsvärmar med fiskliknande form klarar denna kontroll. Dessa sorteras bort genom en manuell kontroll som sker löpande under säsongen.
+  </p>
+
+  <h2>Mätning av fisk</h2>
+  <p>
+  Samtidigt som skuggbilderna skapas mäts även höjden på den passerande fisken. Det är alltså höjden på fisken som mäts och inte längden. För att få fram längden på fisken multipliceras höjden i millimeter med en bestämd faktor för att få på så sätt få fram längden. 
+  </p>
+  <p>
+  Eftersom den data som visas på fiskdata.se inte är analyserad eller tolkad multipliceras fiskens höjd med en generell faktor på 5,5 för att få fram en ungefärlig längd i centimeter. Denna faktor är vald för att stämma någorlunda överrens med de flesta fiskarter och fisk av olika storlek. Olika fiskarter har olika förhållande mellan höjd och längd. Jämför t.ex en braxen med en ål så har de en höjd/längdfaktor på ca 3 mot 13. Med dessa faktorer givna kan vi räkna ut att en braxen med en höjd på 15 cm är ca 45 cm lång (15*3). Längden på en ål med höjden 5 cm kan på motsvarande sätt räknas fram till ca 65 cm (5*13). 
+  </p>
+  <p>
+  För lekvandrande lax och öring varierar denna faktor mellan ca 4,0 och 6,5 beroende på fiskens storlek, kondition och livsstadie. En liten lax med en längd på ca 60 cm är t.ex längre i förhållande till sin höjd jämfört med en stor lax på 100 cm som oftast är högre och kortare. Samma förhållande gäller även för öring. 
+  </p>
+  <p>
+  Det område på fisken som per automatik mäts på en uppströms passerande fisk är området precis framför ryggfenan vertikalt ner till bukens lägsta punkt. Om en fisk istället backar ner genom skannerplattorna blir fisken mätt bakom ryggfenan ner till buken. Därför blir höjden per automatik mindre på en fisk som backar jämfört med en uppvandrande fisk. Ytterligare en faktor som kan medföra en variation på höjdmätningen är om fisken simmar rakt igenom (helt horisontellt) skannerplattorna eller om den simmar lite snett i höjdled. Därför kan det skilja ganska mycket på de automatiskt beräknade längderna som syns på fiskdata.se. 
+  </p>
+  <p class="image-container">
+  <img class="img-responsive" src="/raknare/_img/silhuette-example.png"><br>
+  <span">Exempel på skuggbild som produceras av skannerplattorna.</span>
+  </p>
+
+  <h2>Tolkning av data</h2>
+  <p>
+  All data som samlas in från fiskräknaren i Fällfors   analyseras och tolkas manuellt där varje enskilt registrerat objekt kontrolleras noggrannt. Vid denna kontroll avgörs först om de passerande objekten är fisk eller icke fisk. Därefter verifieras att de registrerade passagerna verkligen ägt rum och skett i angiven riktning. För varje godkänd fiskpassage artbestäms sedan fisken varefter silhuettbildens karaktär, fiskens vinkel, simhastighet och riktning granskas. Vid behov kan t.ex. höjden på fisken mätas mer nogrannt och justeras så att de registrerade värdena blir mera rättvisande. 
+  </p>
+  <p>
+  Efter granskning och tolkning lagras uppgifter om fisken art, yttre karaktär samt passage varvid bl.a fiskens preliminära längd från live-sidan ersätts med den längd som beräknats genom empiriskt framtagna artanpassade längd-höjd funktioner. 
+  </p>
+
+  <p>
+  Detta analys- och tolkningsarbete utförs löpande i en speciellt framtagen programvara där även alla resultat lagras. Programvaran har tagits fram som ett arbetsredskap för att underlätta övervakning av drift, datafångst på distans, datasäkring, granskning, tolkning och lagring av data samt presentation av färdiga resultat och sammanställningar. 
+  </p>
+
+  <h2>Drift av räknaren</h2>
+  <p>
+  Den praktiska driften och rengöringen av fiskräknaren sköts av lokal driftspersonal. Övervakning och datafångst sköts på distans av Fiskevårdsteknik AB. Driften av fiskräknarens olika komponenter övervakas av larmsystem och loggas kontinuerligt. Vid kortare driftavbrott rekonstrueras den ej övervakade fiskvandringen genom regelstyrda interpoleringsprocesser och information från kompletterande övervakningssystem.
+  </p>
+  <p>
+  Alla ej granskade resultat från fiskräknaren uppdateras löpande med automatik och presenteras på denna sida. Den granskade och tolkade datan redovisas kontinuerligt via ett specifikt gränssnitt som uppdateras löpande och slutligen fastställs i en rapport vid årets slut. För tillfället är inte detta gränssnitt tillgängligt för allmänheten. 
+  </p>
+
+  <h2>Ytterligare information</h2>
+  <p>Om ni vill ha mer information om fiskräknaren vid Fällfors  eller om fiskräknaren generellt är ni välkomna att kontakta <a href="http://fvt.se">Fiskevårdsteknik AB</a> via epost: <a href="mailto:info@fiskevardsteknik.se">info@fiskevardsteknik.se</a></p>
+
+  <p>Mer information om <a href="http://www.riverwatcher.is">fiskräknarna från Vaki</a>.</p>
+ </div>
+</div>   
+			</div>
+	    </div> <!-- Slut live-panel -->
+	    
+						
+			<!-- Modal -->
+		<div class="modal fade" id="videoSilhModal" tabindex="-1" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<div style="" id="modalInfo" class="text-center">
+							<button type="button" style="margin-right: 15px" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&nbsp;&times;&nbsp;</span></button>
+							<span id="modalDateTime"></span> -
+							<span id="modalLength"></span> 
+							<span id="modalDir"></span>
+							
+	        			</div>	
+	        		</div>
+					<div class="modal-body">
+						<div id="modalVideoContainer"></div>
+						<!--div style="margin-top:10px;" id="modalSilhContainer"></div-->
+						<div style="margin-top:10px;" id="modalMetaData" class="text-center"></div>
+					</div>
+				</div>
+			</div>
+        </div>
+		 <!-- LOGIN MODAL -->
+		 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content" id="loginDiv">
+              <div class="modal-header">
+                <button type="button" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                <h4 class="modal-title" id="loginHeader">Log in on fiskdata.se</h4>
+              </div>
+              <div class="modal-body"> 
+                <form id="loginForm">
+                  <div class="form-group" id="userNameFrm">
+                    <label for="userName" class="control-label">Username:</label>
+                    <input type="text" class="form-control" name="userName" id="userName">
+                  </div>
+                  
+                  <div class="form-group mb-4" id="userPasswordFrm">
+                    <label for="userPassword" class="control-label">Password:</label>
+                    <input type="password" class="form-control" name="userPassword" id="userPassword">
+                    <br>
+                    <a id="resetPasswordLink" class="" style="cursor: pointer;">Forgot password</a>
+                  </div>								
+                  <div class="modal-footer mt-4">
+                    <input type="submit" id="loginBtn" class="btn btn-success" value="Logga in"></button>
+                  </div>
+                </form>						
+              </div>
+            </div>
+          
+            <div class="modal-content" id="resetPasswordDiv">
+              <div class="modal-header">
+                <button id="resetCloseButton" type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">Close</span></button>
+                <h4 class="modal-title" id="resetPasswordHeader">Återställ lösenord</h4>
+              </div>
+              <div class="modal-body">
+                <form id="resetPasswordForm">
+                  <div class="form-group mb-4" id="userEmailFrm">
+                    <label for="email" class="control-label">Email:</label>
+                    <input type="text" class="form-control" name="userEmailForgott" id="userEmailForgott">
+                  </div>
+                  <div class="modal-footer mt-4">
+                    <button id="resetPasswordBtn" class="" value="Reset password">Reset password</button>
+                  </div>
+                </form>
+              </div>					
+            </div>
+
+
+          </div>
+        </div>
+	</main>
+	<script type="text/javascript">
+		$(function() {
+
+		// $.getJSON("/raknare/report/ajax/ackNettoChart.php?counterId=670&exportWidth=500&exportHeight=281&disableHeader=0&english=0", function(response) {
+		// 	$('#ackNettoChart').highcharts(response);
+		// 	var chart = $('#ackNettoChart').highcharts();
+			
+		// 	var d = new Date();
+		// 	chart.xAxis[0].setExtremes(null, Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()+30));					
+		// 	//chart.xAxis[0].setExtremes(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate() - 7), Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));					
+		// });
+
+	});
+
+
+	document.addEventListener("DOMContentLoaded", function(){
+	// make it as accordion for smaller screens
+	if (window.innerWidth < 992) {
+
+	// close all inner dropdowns when parent is closed
+	document.querySelectorAll('.navbar .dropdown').forEach(function(everydropdown){
+		everydropdown.addEventListener('hidden.bs.dropdown', function () {
+		// after dropdown is hidden, then find all submenus
+			this.querySelectorAll('.submenu').forEach(function(everysubmenu){
+			// hide every submenu as well
+			everysubmenu.style.display = 'none';
+			});
+		})
+	});
+
+	document.querySelectorAll('.dropdown-menu a').forEach(function(element){
+		element.addEventListener('click', function (e) {
+			let nextEl = this.nextElementSibling;
+			if(nextEl && nextEl.classList.contains('submenu')) {	
+			// prevent opening link if link needs to open dropdown
+			e.preventDefault();
+			if(nextEl.style.display == 'block'){
+				nextEl.style.display = 'none';
+			} else {
+				nextEl.style.display = 'block';
+			}
+
+			}
+		});
+	})
+	}
+	// end if innerWidth
+	}); 
+	// DOMContentLoaded  end
+
+	$(document).ready(function() {		
+    	
+
+		// Sätter höjden på tabellen till samma som bilden
+		$('#liveTable').height($('#liveImage').height());
+	
+		var highchartsOptions = Highcharts.setOptions({
+			global: {
+						useUTC: false
+					},
+			lang: 
+			{
+				loading: 'Laddar diagram...',
+				months: ['Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni', 'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December'],
+				weekdays: ['Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag', 'Söndag'],
+				shortMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sept', 'Okt', 'Nov', 'Dec'],
+				exportButtonTitle: "Exportera",
+				printButtonTitle: "Importera",
+				rangeSelectorFrom: "Från",
+				rangeSelectorTo: "Till",
+				rangeSelectorZoom: "Period",
+				downloadPNG: 'Ladda ner som PNG',
+				downloadJPEG: 'Ladda ner som JPG',
+				downloadPDF: 'Ladda ner som PDF',
+				downloadSVG: 'Ladda ner som SVG',
+				printChart: 'Skriv ut diagram',
+				thousandsSep: " ",
+				decimalPoint: ',',
+				resetZoom: "Återställ zoom"
+			}
+			
+		});
+
+		var options = {
+			chart: {
+				renderTo: 'chartContainer',
+				zoomType: "x",
+				backgroundColor: '#002133'
+				
+			},
+			legend: {
+				enabled: false
+			},
+			title: {
+				text: null,
+			},
+			xAxis: {
+				type: 'datetime',
+				showLastLabel: true,
+				endOnTick: false,
+				labels: {
+					
+					style: {
+						color: 'white'
+					}
+				},
+				
+			},
+			yAxis: [{ // Primary yAxis
+				labels: {
+					formatter: function() {
+						return this.value +'';
+					},
+					style: {
+						color: '#FFA500'
+					}
+				},
+				title: {
+					text: 'Nettoregistreringar per dag',
+					style: {
+						color: '#FFA500'
+					}, 
+					rotation: 270, 
+					margin: 30
+				},
+				opposite: true
+			},  {
+				min: 0,
+				allowDecimals: false,
+				title: {
+					text: 'Vattentemperatur (\xB0C)',
+					style: {
+							color: "lightgreen"
+						}
+					},
+					labels: {
+						formatter: function() {
+							return this.value;
+						},
+						style: {
+							color: "lightgreen"
+						}
+					},
+					opposite: false
+				},
+				,  {
+				min: 0,
+				allowDecimals: false,
+				title: {
+					text: 'Vattenföring (m3/s)',
+					style: {
+							color: 'rgb(3, 190, 252)'
+						}
+					},
+					labels: {
+						formatter: function() {
+							return this.value;
+						},
+						style: {
+							color: 'rgb(3, 190, 252)'
+						}
+					},
+					opposite: false
+				}
+				],
+				tooltip: {
+					crosshairs: true,
+					shared: true
+				},
+				plotOptions: {
+					series: {
+						marker: {
+							enabled: false
+						}
+					}
+				},
+
+				series: [],
+				credits: {
+					enabled: false
+				}
+			}
+			
+			$.getJSON("/raknare/live/ajax/liveChart.php?counterId=670&darkMode=true&lang=se", function(response) {
+				for (var i = 0; i < response.length; i++) {			
+					options.series[i] = response[i];
+				};
+				console.log(options);
+				chart = new Highcharts.Chart(options);
+			});
+		
+					$(document).ready(function() {
+				$.ajax({
+					url: '/raknare/report/ajax/montlySpeciesTblJson.php?counterId=670&counterYear=2025&language=se',
+					dataType: 'json',
+					success: function(response) {
+					var columns = [
+						{ data: 'Art', title: 'Art', className: 'text-left' }
+					];
+
+					var descriptionText = response.description;
+
+					$('#tbl_species_descriptionText').html(descriptionText);
+					
+					if (response.data && response.data.length > 0) {
+						Object.keys(response.data[0]).forEach(function(key) {
+							if (key !== 'Art') {
+								columns.push({
+									data: key,
+									title: key,
+									render: function(data, type, row) {
+										if (type === 'display') {
+											return renderUpDown(data);
+										}
+										return data;
+									},
+									className: 'text-right'
+								});
+							}
+						});
+					}
+
+					$('#tbl_species').DataTable({
+						data: response.data,
+						columns: columns,
+						paging: false,
+						searching: false,
+						info: false,
+						ordering: false,
+						responsive: false,
+						language: {
+							emptyTable: "Ingen data tillgänglig"
+						},
+						columnDefs: [
+							{ targets: 0, width: '15%' }
+						]
+					});
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					console.error('AJAX error:', textStatus, errorThrown);
+					$('#tbl_species').html('<tr><td>Ett fel uppstod vid hämtning av data.</td></tr>');
+				}
+			});
+		});
+
+		
+		function renderUpDown(data) {
+			if (data === '-' || data === null || typeof data !== 'object') return '-';
+			var up = data.Up !== undefined ? data.Up : 0;
+			var down = data.Down !== undefined ? data.Down : 0;
+			return '<span class="up-arrow">&#x2191;</span>' + '<span style="font-size: 12px;">' + up + '</span>' + '<br>' +
+				   '<span class="down-arrow">&#x2193;</span>' + '<span style="font-size: 12px;">' + down + '</span>';
+		}
+
+			
+
+
+			
+}); // Slut document ready
+
+
+
+
+		$(".videoSlider").on('click', "li", function(){
+			//console.log($(this).attr('id'));
+			showVideo($(this).attr('id'), 2025, 'camera');
+		});
+
+		// Visar modal och spelar upp video när man klickar på den. 
+		function showVideo(id,counterYear,counterType) {
+			// Töm innehåll
+			$("#modalDateTime").empty();
+			$("#modalLength").empty();
+			$("#modalDir").empty();
+			$("#modalSort").empty();
+			$("#modalVideoContainer").empty();
+			$("#modalSilhContainer").empty();
+			
+			$.getJSON('/raknare/_shared/ajax/getMetaData.php?counterYear=2025&id='+id, function(metaData) {
+
+				$("#modalDateTime").html(metaData[0]['DateTime']);
+				$("#modalLength").html(metaData[0]['Length']);
+				$("#modalDir").html(metaData[0]['Dir']);
+				$("#modalSort").html(metaData[0]['NameSv']);
+				//$("#playlistId").html(playlistId);
+			}).error(function(data) {
+				//console.log(data);
+				toastr.warning( "Kunde inte hitta registreringen" );
+			}); 
+			
+			if (counterType === "camera" || counterType === "fvt"  || counterType === "china" || counterType === "uvc") {
+				var videoHref = "/raknare/_shared/ajax/getVideo.php?id="+ id +"&year="+ counterYear +"&videoHeight=240";
+						
+				$("#modalVideoContainer").load(videoHref, function() {
+					console.log("video färdig");
+				});
+			}
+
+			// Om FVT-räknaren hämta IR-bild
+			
+			if (counterType === 'fvt' || counterType === "uvc") {
+				var silhHref = "/raknare/_shared/ajax/getIR_img.php?id="+ id +"&year="+ counterYear +"&cutWhiteSpace=1&fixedSilhHeight=400&scaleStock=1&mirror=1";
+				$("#modalSilhContainer").load(silhHref, function(response) {
+					console.log("Färdigladdad-irbild");
+					console.log(response)			
+				});
+			} else {
+				var silhHref = "/raknare/_shared/ajax/getSilh_dev3.php?id="+ id +"&year="+ counterYear +"&cutWhiteSpace=1&fixedSilhHeight=400&scaleStock=1&mirror=1";
+				$("#modalSilhContainer").load(silhHref, function(response) {
+					//console.log("Färdigladdad");			
+				});
+			}
+			var myModal = new bootstrap.Modal(document.getElementById("videoSilhModal"));
+			myModal.show();
+		}
+		
+					// Laddar senaste video om kameraräknare
+			loadVideoList("#videoLatestContainer",0);
+			loadVideoList("#videoSelectionContainer",1);
+
+			function loadVideoList(container,selection) {
+				
+				$.getJSON('/raknare/live/ajax/loadVideos.php?counterId=670&counterYear=2025&urval='+selection, function(data) {
+					
+					$(container +" .videoSlider").empty();
+					
+					if(data.length == 0) { // Göm div om det saknas video
+						console.log('inget resultat')
+						$(container +" .videoSlider").addClass("text-center").html("Kunde inte hitta några videofilmer.");	
+						// $(container)prevAll('loader').html("<div>saknar video</div>");
+						// console.log(container)					
+					}
+					else { // Vi har ett resultat
+						
+						$(container).removeClass("hidden");
+						var items = [];
+						var cnt = 0;
+						var maxVideos = 50; // Max antal registreringar som visas
+						
+						$.each( data, function(key,val ) {
+							if(cnt > maxVideos) { 
+								return false;
+							}
+							if(val['Dir'] == 1) { var dirArrow = " &nbsp; <span class='glyphicon glyphicon-triangle-top' aria-hidden='true'></span>"; } 
+							else if(val['Dir'] == 0) { var dirArrow =" &nbsp; <span class='glyphicon glyphicon-triangle-bottom' aria-hidden='true'></span>"; }
+							else { var dirArrow =" &nbsp; <span class='glyphicon glyphicon-minus' aria-hidden='true'></span>"; }
+							
+							// Om det saknas miniatyrbild, visa silhuett istället
+							if(val['thumb'].substr(1,3) == "svg") {
+									img = val['thumb'];
+							}	
+							else {
+								
+								
+								img = '<img src="/raknare/_img/play_overlay.png" class="img-responsive center-block" style="background:url('+ val['thumb'] +');background-size:cover;background-repeat: no-repeat;background-position: center center;">';
+								//console.log(img);
+							}
+							
+							length = val['Length_calc'] > 0 ? val['Length_calc'] + " cm" : "";
+
+							items.push( 
+								"<li class='li-video text-center' id='" + val['arvId'] + "'>" 
+								//+ '<img src="/raknare/_img/play_overlay.png" class="img-responsive center-block" style="background:url('+ val['thumb'] +');background-size:cover;background-repeat: no-repeat;background-position: center center;">'
+								+ img + "<br>"
+								+  val['DateTime'] + "<br>" 
+								+  length
+								+  dirArrow  
+								+ "</li>" 
+								);
+							cnt++;
+						});	
+						$( "<ul/>", {
+							"class": "ul-video",
+							html: items.join( "" )
+						}).appendTo( container +" .videoSlider" );
+						
+
+					} // Slut If om inte tom
+				});
+	}	
+
+
+	
+
+
+	$( window ).resize(function() { // Skala om bild och tabell om sidstorleken ändras
+		resizeGui();
+	});
+	$( window ).load(function() {  // Skala om tabell när sidan är färdigladdad
+		resizeGui();
+	});
+
+	$(function() {
+		var error;
+					if(error) {
+				toastr.error( error );
+			}
+		});
+
+
+	function resizeGui(){ 
+		var liveImg = $("#liveImage").outerHeight();
+		var tableLiveHeader = $("#tableLiveHeader").outerHeight();
+		var tableLiveFooter = $("#tableLiveFooter").outerHeight();
+
+		if ($("body").width() > 768) {
+			$('#tableLiveTable').css('height',  (liveImg - tableLiveHeader - tableLiveFooter));	
+		}
+		else {
+			$('#tableLiveTable').css('height',  200);	
+		}
+	}
+
+</script>
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-44943627-3', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>
+
